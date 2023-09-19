@@ -1,0 +1,30 @@
+#Deployment
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: data-kpi-deployment-ENVIRONMENT
+  namespace: hub2-prod
+  labels:
+    app: data-kpi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: data-kpi
+  template:
+    metadata:
+      name: data-kpi
+      namespace: hub2-prod
+      labels:
+        app: data-kpi
+        environment: ENVIRONMENT
+    spec:
+      containers:
+      - name: data-kpi
+        image: registry.gitlab.com/hub_2/services/data-kpi:VERSION
+        envFrom:
+          - secretRef:
+             name: data-kpi-secrets
+      imagePullSecrets:
+      - name: regcred
